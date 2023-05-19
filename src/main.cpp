@@ -10,11 +10,13 @@ signal line to arduino digital pin 2.
 #include <stdint.h>
 #include <Arduino.h>
 
+#include <Led.h>
+
 typedef uint8_t byte;
 
-byte statusLed1    = 11;
-byte statusLed2    = 12;
-byte statusLed3    = 13;
+Led led1 = Led(11);
+Led led2 = Led(12);
+Led led3 = Led(13);
 
 byte relay = 3;
 
@@ -49,15 +51,10 @@ void setup()
   Serial.begin(9600);
    
   // Set up the status LED line as an output
-  pinMode(statusLed1, OUTPUT);
-  digitalWrite(statusLed1, HIGH);  // We have an active-low LED attached
+  led1.on();
+  led2.off();
+  led3.off();
 
-  pinMode(statusLed2, OUTPUT);
-  digitalWrite(statusLed2, HIGH);
-
-  pinMode(statusLed3, OUTPUT);
-  digitalWrite(statusLed3, HIGH);
-  
   pinMode(sensorPin, INPUT);
   digitalWrite(sensorPin, HIGH);
 
@@ -118,8 +115,10 @@ void loop()
     Serial.print("\t");       // Print tab space
 
     if (int(flowRate) < 1) {
+      led2.off();
       digitalWrite(relay, LOW);
     } else {
+      led2.on();
       digitalWrite(relay, HIGH);
     }
 
